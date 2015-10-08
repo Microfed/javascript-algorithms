@@ -1,10 +1,6 @@
 (function (exports) {
   'use strict';
 
-  /**
-   * Complexity O(|E|), where E is the set
-   * which contains all edges and |E| is their count.
-   */
   var topologicalSort = (function () {
 
     function topologicalSortHelper(node, visited, temp, graph, result) {
@@ -24,10 +20,32 @@
       result.push(node);
     }
 
+    /**
+     * Topological sort algorithm of a directed acyclic graph.<br><br>
+     * Time complexity: O(|E|) where E is a number of edges.
+     *
+     * @public
+     * @module graphs/others/topological-sort
+     * @param {Array} graph Adjacency list, which represents the graph.
+     * @returns {Array} Ordered vertices.
+     *
+     * @example
+     * var topsort =
+     *  require('path-to-algorithms/src/graphs/' +
+     * 'others/topological-sort').topologicalSort;
+     * var graph = {
+     *     v1: ['v2', 'v5'],
+     *     v2: [],
+     *     v3: ['v1', 'v2', 'v4', 'v5'],
+     *     v4: [],
+     *     v5: []
+     * };
+     * var vertices = topsort(graph); // ['v3', 'v4', 'v1', 'v5', 'v2']
+     */
     return function (graph) {
-      var result = [],
-          visited = [],
-          temp = [];
+      var result = [];
+      var visited = [];
+      var temp = [];
       for (var node in graph) {
         if (!visited[node] && !temp[node]) {
           topologicalSortHelper(node, visited, temp, graph, result);
@@ -40,4 +58,3 @@
   exports.topologicalSort = topologicalSort;
 
 }(typeof exports === 'undefined' ? window : exports));
-
