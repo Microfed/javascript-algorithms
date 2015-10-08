@@ -5,6 +5,53 @@ var Vertex = mod.Node;
 var RBTree = mod.RBTree;
 var Colors = mod.Colors;
 
+// from http://www.eternallyconfuzzled.com/tuts/datastructures/jsw_tut_rbtree.aspx
+var getTreeHeight = function (node) {
+  var lh, rh;
+
+  if (node == null) {
+    return 1;
+  } else {
+    var ln = node.getLeft();
+    var rn = node.getRight();
+
+    /* Consecutive red links */
+    if (node.isRed() && ln && rn) {
+      if (ln.isRed() || rn.isRed()) {
+        // Red violation
+        return 0;
+      }
+    }
+
+    lh = isTreeViolatesSomeRules(ln);
+    rh = isTreeViolatesSomeRules(rn);
+
+    /* Invalid binary search tree */
+    if ((ln != null && ln.getKey() >= node.getKey())
+        || (rn != null && rn.getKey() <= node.getKey())) {
+      // Binary tree violation
+      return 0;
+    }
+
+    /* Black height mismatch */
+    if (lh != 0 && rh != 0 && lh != rh) {
+      // Black violation
+      return 0;
+    }
+
+    /* Only count black links */
+    if (lh != 0 && rh != 0) {
+      return node.isRed() ? lh : lh + 1;
+    } else {
+      return 0;
+    }
+  }
+};
+
+var isTreeViolatesSomeRules = function (root) {
+  return getTreeHeight(root) === 0;
+};
+
 describe('Node', function () {
 
   it('should be a constructor function', function () {
@@ -97,4 +144,31 @@ describe('RBTree', function () {
     });
   });
 
+  describe('remove method', function () {
+    it('should be able to remove value by given key', function () {
+      var tree = new RBTree();
+
+      expect(tree.get(1)).toBeUndefined();
+      tree.put(1, 'baz');
+      expect(tree.get(1)).toBe('baz');
+
+      tree.remove(1);
+      expect(tree.get(1)).toBeUndefined();
+    });
+
+    it('should remain the tree balanced after removing a node', function () {
+      var tree = new RBTree();
+
+      tree.put(1, 'baz');
+      tree.put(2, 'foo');
+      tree.put(3, 'bar');
+      tree.put(4, 'bar');
+      tree.put(5, 'foobar');
+      tree.put(6, 'foobar1');
+
+      tree.remove(2);
+
+      expect(isTreeViolatesSomeRules(tree._root)).toBeTruthy();
+    });
+  });
 });

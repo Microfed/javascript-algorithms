@@ -266,4 +266,28 @@
     }
   };
 
+  /**
+   * Delete value from the tree by the given key.
+   *
+   * @public
+   * @param {Number} key A key to be searched for.
+   */
+  exports.RBTree.prototype.remove = function (key) {
+    this._remove(this._root, key);
+  };
+
+  exports.RBTree.prototype._remove = function (node, key) {
+    if (node) {
+      if (node.getKey() === key) {
+        node.setValue();
+      }
+
+      if (node.getKey() > key) {
+        this._remove(node.getLeft(), key);
+      } else {
+        this._remove(node.getRight(), key);
+      }
+    }
+  };
+
 })(typeof window === 'undefined' ? module.exports : window);
