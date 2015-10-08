@@ -52,7 +52,7 @@
    * @param {Node} right Right node.
    * @param {Number} color Node color.
    */
-  function Node(key, value, left, right, color) {
+  function Node (key, value, left, right, color) {
     this._key = key;
     this._left = left;
     this._right = right;
@@ -90,16 +90,16 @@
    * key, value, left, right and color.
    */
   'key value left right color'
-  .split(' ')
-  .forEach(function (key) {
-    var valueName = key.substr(0, 1).toUpperCase() + key.substr(1, key.length);
-    Node.prototype['get' + valueName] = function () {
-      return this['_' + key];
-    };
-    Node.prototype['set' + valueName] = function (val) {
-      this['_' + key] = val;
-    };
-  });
+    .split(' ')
+    .forEach(function (key) {
+      var valueName = key.substr(0, 1).toUpperCase() + key.substr(1, key.length);
+      Node.prototype['get' + valueName] = function () {
+        return this['_' + key];
+      };
+      Node.prototype['set' + valueName] = function (val) {
+        this['_' + key] = val;
+      };
+    });
 
   exports.Node = Node;
 
