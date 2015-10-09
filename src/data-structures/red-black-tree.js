@@ -272,21 +272,64 @@
    * @public
    * @param {Number} key A key to be searched for.
    */
-  exports.RBTree.prototype.remove = function (key) {
-    this._remove(this._root, key);
+  //exports.RBTree.prototype.remove = function (key) {
+  //  this._remove(this._root, key);
+  //};
+  //
+  //exports.RBTree.prototype._remove = function (node, key) {
+  //  if (node) {
+  //    if (node.getKey() === key) {
+  //      node.setValue();
+  //    }
+  //
+  //    if (node.getKey() > key) {
+  //      this._remove(node.getLeft(), key);
+  //    } else {
+  //      this._remove(node.getRight(), key);
+  //    }
+  //  }
+  //};
+
+  exports.RBTree.prototype.traverseR = function () {
+    return this._traverseR(this._root);
   };
 
-  exports.RBTree.prototype._remove = function (node, key) {
+  exports.RBTree.prototype._traverseR = function (node) {
     if (node) {
-      if (node.getKey() === key) {
-        node.setValue();
-      }
+      var left = node.getLeft();
+      var right = node.getRight();
+      var traversal = this._traverseR(left);
 
-      if (node.getKey() > key) {
-        this._remove(node.getLeft(), key);
-      } else {
-        this._remove(node.getRight(), key);
-      }
+      traversal.unshift(node);
+
+      return traversal.concat(this._traverseR(right));
+    } else {
+      return [];
+    }
+  };
+
+  /**
+   * Traverse tree in order.
+   *
+   * @public
+   * @return {Array} An array of nodes
+   */
+  exports.RBTree.prototype.traverse = function () {
+    var list = [];
+    this._traverse(this._root, list);
+
+    return list;
+  };
+
+  exports.RBTree.prototype._traverse = function (node, list) {
+    if (node) {
+      var left = node.getLeft();
+      var right = node.getRight();
+
+      list.push(node);
+
+      this._traverse(left, list);
+      this._traverse(right, list);
     }
   };
 
